@@ -3,9 +3,6 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { PanoramaManifestPlugin, PanoramaTargetPlugin } = require('webpack-panorama-x');
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 
-const entries = require('./entries.config');
-const entry = Object.assign({}, entries);
-
 /** @type {import('webpack').Configuration} */
 module.exports = {
     mode: 'development',
@@ -27,9 +24,6 @@ module.exports = {
             react: './node_modules/react/umd/react.production.min.js',
         },
     },
-
-    // entries from entries.config.js
-    entry: entry,
 
     module: {
         rules: [
@@ -86,6 +80,14 @@ module.exports = {
             typescript: {
                 configFile: path.resolve(__dirname, 'tsconfig.json'),
             },
+        }),
+        new PanoramaManifestPlugin({
+            entries: [
+                { import: './utils/x-nettable-dispatcher.ts', filename: 'x-nettable-dispatcher.js' },
+                { import: './loading-screen/layout.xml', filename: 'custom_loading_screen.xml' },
+                { import: './hud/layout.xml', filename: 'hud.xml', type: 'Hud' },
+                { import: './end_screen/layout.xml', filename: 'endscreen.xml', type: 'EndScreen' },
+            ],
         }),
         new ReplaceInFileWebpackPlugin([
             {
