@@ -20,9 +20,6 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '...'],
         symlinks: false,
-        alias: {
-            react: './node_modules/react/umd/react.production.min.js',
-        },
     },
 
     module: {
