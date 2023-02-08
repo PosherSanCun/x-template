@@ -1,0 +1,52 @@
+{
+  "npc_kv_generator_test": {
+    "Searchable": 1,
+    "Cost": 1,
+    "BaseClass": "npc_dota_creature",
+    "Model": "models/heroes/earthshaker/earthshaker.vmdl",
+    "ModelScale": 0.85,
+    "Creature": {
+      "AttachWearables": {
+        "1": {
+          "ItemDef": 123
+        },
+        "2": {
+          "ItemDef": 223
+        }
+      }
+    },
+    "SoundSet": "Hero_Earthshaker",
+    "particle_folder": "particles/units/heroes/hero_earthshaker",
+    "GameSoundsFile": "soundevents/game_sounds_heroes/game_sounds_earthshaker.vsndevts",
+    "VoiceFile": "soundevents/voscripts/game_sounds_vo_earthshaker.vsndevts",
+    "Ability1": 0,
+    "Ability2": 0,
+    "Ability3": 0,
+    "Ability4": 0,
+    "Ability5": 0,
+    "Ability6": 0,
+    "ConsideredHero": 1,
+    "HealthBarOffset": 200,
+    "MovementSpeed": 310,
+    "MovementTurnRate": 0.9,
+    "MovementCapabilities": "DOTA_UNIT_CAP_MOVE_GROUND",
+    "AttackCapabilities": "DOTA_UNIT_CAP_MELEE_ATTACK",
+    "ArmorPhysical": 5,
+    "MagicalResistance": 0,
+    "StatusHealth": 500,
+    "StatusHealthRegen": 0,
+    "StatusMana": 100,
+    "StatusManaRegen": 0,
+    "BountyGoldMin": 0,
+    "BountyGoldMax": 0,
+    "AttackDamageMin": 50,
+    "AttackDamageMax": 60,
+    "AttackRate": 1.5,
+    "AttackAnimationPoint": 0.467,
+    "AttackRange": 150,
+    "BoundsHullName": "DOTA_HULL_SIZE_HERO",
+    "RingRadius": 70,
+    "ProjectileSpeed": 0,
+    "HasInventory": 1
+  }
+}

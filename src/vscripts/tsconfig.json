@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "vscripts",
+        "rootDir": ".",
+        "outDir": "../../game/scripts/vscripts/",
         "target": "esnext",
         "lib": ["esnext"],
         "types": ["@moddota/dota-lua-types/normalized"], // enum简洁模式API
@@ -16,7 +16,7 @@
         "strictPropertyInitialization": false,
         "strict": false
     },
-    "include": ["src", "../../shared"],
+    "include": [".", "../shared"],
     "tstl": {
         "luaTarget": "JIT",
         "sourceMapTraceback": true

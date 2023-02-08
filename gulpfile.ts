@@ -5,9 +5,9 @@ import path from 'path';
 const paths: { [key: string]: string } = {
     excels: 'excels',
     kv: 'game/scripts/npc',
-    src_json: 'game/scripts/src/json',
-    panorama_json: 'content/panorama/src/json',
-    panorama: 'content/panorama',
+    vscripts_src: 'src/vscripts',
+    panorama_src: 'src/panorama',
+    content_panorama: 'content/panorama',
     game_resource: 'game/resource',
 };
 
@@ -48,7 +48,14 @@ const kv_2_js =
     () => {
         const kvFiles = `${paths.kv}/**/*.{kv,txt}`;
         const transpileKVToJS = () => {
-            return gulp.src(kvFiles).pipe(dotax.kvToJS()).pipe(gulp.dest(paths.panorama_json)).pipe(gulp.dest(paths.src_json));
+            return (
+                gulp
+                    .src(kvFiles)
+                    .pipe(dotax.kvToJS())
+                    // 输出json到两个目录，一个是panorama的，一个是vscripts的
+                    .pipe(gulp.dest(path.join(paths.panorama_src, 'json')))
+                    .pipe(gulp.dest(path.join(paths.vscripts_src, 'json')))
+            );
         };
 
         if (watch) {
@@ -129,9 +136,15 @@ const localization_2_csv = () => {
 const create_image_precache =
     (watch: boolean = false) =>
     () => {
-        const imageFiles = `${paths.panorama}/images/**/*.{jpg,png,psd}`;
+        const imageFiles = `${paths.content_panorama}/images/**/*.{jpg,png,psd}`;
         const createImagePrecache = () => {
-            return gulp.src(imageFiles).pipe(dotax.imagePrecacche(`content/panorama/images/`)).pipe(gulp.dest(paths.panorama));
+            return (
+                gulp
+                    .src(imageFiles)
+                    .pipe(dotax.imagePrecacche(`content/panorama/images/`))
+                    // 输出 image_precache*.css 到 panorama_src 目录中
+                    .pipe(gulp.dest(paths.panorama_src))
+            );
         };
         if (watch) {
             return gulp.watch(imageFiles, createImagePrecache);
