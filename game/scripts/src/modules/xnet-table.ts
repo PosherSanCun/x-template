@@ -23,6 +23,8 @@ export class XNetTable {
     private _data_queue: {
         target?: PlayerID;
         data: string;
+        table_name?: string;
+        key_name?: string;
     }[] = [];
 
     /**
@@ -47,11 +49,11 @@ export class XNetTable {
         if (value == null) {
             this._data[tname][k] = {};
             let data = this._prepareDataChunks(tname, k, {});
-            this._updatePositively(undefined, data);
+            this._updatePositively(undefined, data, tname, k);
         } else {
             this._data[tname][k] = value;
             let data = this._prepareDataChunks(tname, k, value);
-            this._updatePositively(undefined, data);
+            this._updatePositively(undefined, data, tname, k);
         }
     }
 
@@ -87,11 +89,11 @@ export class XNetTable {
         if (value == null) {
             this._player_data[playerId]![tname][k] = {};
             let data = this._prepareDataChunks(tname, k, null, playerId);
-            this._updatePositively(playerId, data);
+            this._updatePositively(playerId, data, tname, k);
         } else {
             this._player_data[playerId]![tname][k] = value;
             let data = this._prepareDataChunks(tname, k, value, playerId);
-            this._updatePositively(playerId, data);
+            this._updatePositively(playerId, data, tname, k);
         }
     }
 
@@ -142,20 +144,36 @@ export class XNetTable {
         return chunks;
     }
 
-    private _updatePositively(target: PlayerID | undefined, chunks: string[]) {
+    private _updatePositively(target: PlayerID | undefined, chunks: string[], tname: string, kname: string) {
+        // clear the queue with same table name and key name
+        // so we send data only once every frame
+        this._data_queue = this._data_queue.filter(data => {
+            return data.table_name != tname || data.key_name != kname || data.target != target;
+        });
+        // always push data to the head of the queue
         for (let chunk of chunks.reverse()) {
             this._data_queue.unshift({
                 target: target,
                 data: chunk,
+                table_name: tname,
+                key_name: kname,
             });
         }
     }
 
-    private _updateNegatively(target: PlayerID | undefined, chunks: string[]) {
+    private _updateNegatively(target: PlayerID | undefined, chunks: string[], tname: string, kname: string) {
+        // clear the queue with same table name and key name
+        // so we send data only once every frame
+        this._data_queue = this._data_queue.filter(data => {
+            return data.table_name != tname || data.key_name != kname || data.target != target;
+        });
+        // push data to the tail of the queue
         for (let chunk of chunks) {
             this._data_queue.push({
                 target: target,
                 data: chunk,
+                table_name: tname,
+                key_name: kname,
             });
         }
     }
@@ -171,7 +189,7 @@ export class XNetTable {
         for (let tname in this._data) {
             for (let key in this._data[tname]) {
                 let data = this._prepareDataChunks(tname, key, this._data[tname][key], playerId);
-                this._updateNegatively(playerId, data);
+                this._updateNegatively(playerId, data, tname, key);
             }
         }
         // 发送所有这个玩家独享的数据
@@ -181,7 +199,7 @@ export class XNetTable {
             if (table == null) continue;
             for (let key in table) {
                 let data = this._prepareDataChunks(tname, key, table[key], playerId);
-                this._updateNegatively(playerId, data);
+                this._updateNegatively(playerId, data, tname, key);
             }
         }
     }
